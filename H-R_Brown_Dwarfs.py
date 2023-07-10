@@ -51,9 +51,7 @@ marmajek1_1.iloc[:, :] = marmajek1_1.iloc[:, :].astype(float)
 plt.rcParams['figure.figsize'] = [20, 12]
 
 # Create a plot with two subplots
-# The first subplot is for Teff vs logL
-# The second subplot is for Teff vs Mv
-plt.subplot(2,2,1)
+# plt.subplot(2,2,1)
 
 # Plot a scatter plot of x=Teff and y=logL
 plt.scatter(marmajek1['Teff'], marmajek1['logL'], marker='x', color='blue', label='Stars')
@@ -69,9 +67,7 @@ plt.ylabel('logL')
 # Add a title to the plot
 plt.title('H-R Diagram for Brown Dwarfs')
 # Display the plot
-# Defer this until the second subplot is added
-# plt.show()
-
+plt.show()
 
 
 # *****************************************************************************************
@@ -97,7 +93,7 @@ marmajek2.iloc[:, :] = marmajek2.iloc[:, :].astype(float)
 print(marmajek2)
 
 # Create the third subplot
-plt.subplot(2,2,2)
+# plt.subplot(2,2,2)
 
 # Plot a scatter plot of x=W1-W2 and y=Mv
 plt.scatter(marmajek2['Mv'], marmajek2['W1-W2'])
@@ -112,6 +108,9 @@ plt.ylabel('Mv')
 # Add a title to the plot
 plt.title('Color-Magnitude Diagram for Brown Dwarfs')
 
+# Display the plot
+plt.show()
+
 
 # *****************************************************************************************
 # Section 3
@@ -120,15 +119,37 @@ plt.title('Color-Magnitude Diagram for Brown Dwarfs')
 # Copy only the rows with complete Teff and wavelength data
 # If you don't filter out the rows with missing data, the plot will not work
 # because the plot function cannot handle missing data (which are strings).
-marmajek3 = mamajek.iloc[1:78, 0:2]
-marmajek3_1= mamajek.iloc[79:117, 0:2]
+
+# Read the data into a Pandas DataFrame ensuring that numeric data is treated as float()
+# We read it in again to get the first column which contains the spectral type
+# Not the most efficience code but it works
+mamajek = pd.read_excel('Brown Dwarf Data.xlsx', sheet_name='data', header=0, usecols='A, B, C, D, F, I, Z')
+
+print("marmajek:")
+print(mamajek)
+
+
+# Combine the values in columns 0 and 1 in the marmajek dataframe into a single column and append it to the end of the dataframe
+# This will be used to label the points in the plot
+mamajek['Teff-Spectral Type'] = mamajek['Spectral Type'].astype(str) + " / " + mamajek['Peak wavelength (μm)'].round(3).astype(str)
+
+# Split the data into stars and brown dwarfs
+marmajek3 = mamajek.iloc[1:78, 0:3]
+marmajek3_1= mamajek.iloc[79:117, 0:3]
 
 print("marmajek3:")
 print(marmajek3)
 
 # Convert all of the columns, except the first, to floats
-marmajek3.iloc[:, :] = marmajek3.iloc[:, :].astype(float)
-marmajek3_1.iloc[:, :] = marmajek3_1.iloc[:, :].astype(float)
+marmajek3.iloc[:, 1:] = marmajek3.iloc[:, 1:].astype(float)
+marmajek3_1.iloc[:, 1:] = marmajek3_1.iloc[:, 1:].astype(float)
+
+# Do the following after converting the columns to floats
+# This prevents errors when converting the columns to floats due tot he text fields
+# Add the 'Teff-Spectral Type' column to the marmajek3 dataframe
+marmajek3['Teff-Spectral Type'] = mamajek['Teff-Spectral Type'].iloc[1:78]
+# Add the 'Teff-Spectral Type' column to the marmajek3_1 dataframe
+marmajek3_1['Teff-Spectral Type'] = mamajek['Teff-Spectral Type'].iloc[79:117]
 
 # Print the type of each row and column to the console
 # print(marmajek3.dtypes)
@@ -137,11 +158,14 @@ marmajek3_1.iloc[:, :] = marmajek3_1.iloc[:, :].astype(float)
 print(marmajek3)
 
 # Create the third subplot
-plt.subplot(2,2,3)
+#plt.subplot(2,2,3)
 
 # Plot a scatter plot of x=W1-W2 and y=Mv
-plt.scatter(marmajek3['Teff'], marmajek3['Peak wavelength (μm)'], marker='x', color='blue', label='Stars') # Stars
-plt.scatter(marmajek3_1['Teff'], marmajek3_1['Peak wavelength (μm)'], marker='+', color='brown', label='Brown Dwarfs') # Brown Dwarfs
+plt.scatter(marmajek3['Teff-Spectral Type'], marmajek3['Peak wavelength (μm)'], marker='x', color='blue', label='Stars') # Stars
+#plt.scatter(marmajek3_1['Teff'], marmajek3_1['Peak wavelength (μm)'], marker='+', color='brown', label='Brown Dwarfs') # Brown Dwarfs
+plt.scatter(marmajek3_1['Teff-Spectral Type'], marmajek3_1['Peak wavelength (μm)'], marker='+', color='brown', label='Brown Dwarfs') # Brown Dwarfs
+# Rotate the x-axis labels 90 degrees
+plt.xticks(rotation=90)
 # Add a legend to the plot
 plt.legend(loc='upper right')
 # Invert the x-axis
@@ -149,7 +173,7 @@ plt.legend(loc='upper right')
 # Invert the y-axis
 #plt.gca().invert_yaxis()
 # Label the x-axis
-plt.xlabel('Teff/Spectral Class')
+plt.xlabel('Spectral Class / Teff (K)')
 # Label the y-axis
 plt.ylabel('Peak wavelength (μm)')
 # Add a title to the plot
