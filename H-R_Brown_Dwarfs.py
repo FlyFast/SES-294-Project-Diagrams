@@ -1,3 +1,11 @@
+#*****************************************************************************************
+# Purpose: This program reads in data from the Mamajek Brown Dwarf Data Excel file and 
+#          plots the data.
+#          The plots are for use in SES 294: Research in Astronomical Imaging
+# Author: Keith Norton
+# Date: 5/1/2019
+#*****************************************************************************************
+
 import pandas as pd
 import os
 from datetime import datetime
@@ -167,9 +175,9 @@ plt.scatter(marmajek3_1['Teff-Spectral Type'], marmajek3_1['Peak wavelength (μm
 # Rotate the x-axis labels 90 degrees
 plt.xticks(rotation=90)
 # Add a legend to the plot
-plt.legend(loc='upper left')
+plt.legend(loc='upper right')
 # Invert the x-axis
-#plt.gca().invert_xaxis()
+plt.gca().invert_xaxis()
 # Invert the y-axis
 #plt.gca().invert_yaxis()
 # Label the x-axis
