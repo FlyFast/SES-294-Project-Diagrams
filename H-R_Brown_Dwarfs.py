@@ -131,7 +131,7 @@ print(mamajek)
 
 # Combine the values in columns 0 and 1 in the marmajek dataframe into a single column and append it to the end of the dataframe
 # This will be used to label the points in the plot
-mamajek['Teff-Spectral Type'] = mamajek['Spectral Type'].astype(str) + " / " + mamajek['Peak wavelength (μm)'].round(3).astype(str)
+mamajek['Teff-Spectral Type'] = mamajek['Spectral Type'].astype(str) + " / " + mamajek['Teff'].round(3).astype(str)
 
 # Split the data into stars and brown dwarfs
 marmajek3 = mamajek.iloc[1:78, 0:3]
